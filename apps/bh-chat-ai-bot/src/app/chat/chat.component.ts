@@ -5,6 +5,7 @@ import { ChatHeaderComponent } from '../chat-header/chat-header.component';
 
 @Component({
   selector: 'app-chat',
+  standalone: true,
   template: ` <div class="chat-container">
     <app-chat-header></app-chat-header>
 

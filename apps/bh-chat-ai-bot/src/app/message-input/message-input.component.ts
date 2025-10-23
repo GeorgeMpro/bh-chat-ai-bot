@@ -3,6 +3,7 @@ import { Message } from '../models/message.model';
 
 @Component({
   selector: 'app-message-input',
+  standalone: true,
   template: `
     <footer class="chat-input">
       <input type="text" placeholder="Type a message…" />
