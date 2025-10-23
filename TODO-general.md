@@ -28,6 +28,7 @@
 
 ### Message
 
+- click to edit/emoji
 - allow edit
   - a user can edit HIS messages
   - add "edited"

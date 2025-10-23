@@ -1,11 +1,5 @@
 <div class="chat-messages">
   @for (msg of messages; track msg) {
-    <div class="message"
-         [class.recieved]="msg.type==='received'"
-         [class.sent]="msg.type ==='sent'">
-      <div class="text">{{ msg.text }}</div>
-      <div class="time">{{ msg.time }}</div>
-      <div class="avatar"><img [src]="msg.avatar" alt="msg.user"></div>
-    </div>
+    <app-message-item [msg]="msg"></app-message-item>
   }
 </div>

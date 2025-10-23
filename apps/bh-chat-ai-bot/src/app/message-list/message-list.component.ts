@@ -1,12 +1,15 @@
 import { Component } from '@angular/core';
+import { MessageItemComponent } from '../message-item/message-item.component';
+import { Message } from '../models/message.model';
 
 @Component({
   selector: 'app-message-list',
   templateUrl: './message-list.component.html',
   styleUrls: ['./message-list.component.scss'],
+  imports: [MessageItemComponent],
 })
 export class MessageListComponent {
-  messages = [
+  messages: Message[] = [
     {
       user: 'bot',
       type: 'received',
