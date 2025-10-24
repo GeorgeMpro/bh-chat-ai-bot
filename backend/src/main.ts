@@ -15,16 +15,22 @@ export const io = new Server(server);
 
 const appDir = process.cwd(); // Use the current working directory
 
-app.use(express.static(join(appDir, 'public')));
+app.use(express.static(join(appDir, 'backend/src/public')));
 
+app.use(express.static(join(appDir, 'backend/src/public')));
 app.get('/', (req, res) => {
-  res.sendFile(join(appDir, 'backend/src/public', 'index.html'));
+  res.sendFile(join(appDir, 'index.html'));
 });
 
-io.on('connection', () => {
+
+let count = 0;
+io.on('connection', (socket) => {
   console.log('user connected');
+
+  socket.emit('countUpdated');
 });
 
 server.listen(port, host, () => {
   console.log(`[ ready ] http://${host}:${port}`);
+  console.log(appDir);
 });
