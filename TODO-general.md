@@ -1,5 +1,9 @@
 # Game Plan
 
+- [ ] Answer the:
+  synchronization - How will you architect a chat room that is fully synchronized the client and the server?
+  - solved using websockets: bidirectional connection & persistent
+
 ## NX Monorepo
 
 - add Nx after working skeleton
@@ -25,6 +29,7 @@
   - prompted to log in
   - can post if logged in
   - ? handle same name?
+  - ? choose an avatar from pool ?
 
 ### Message
 
