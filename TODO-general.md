@@ -60,6 +60,9 @@
 
 - firebase
 - [ ]  readme
+- [ ]  extract reusable design
 - setup
 - consideration
+  - limited testing
+  - no auth
 - future ideas

@@ -13,7 +13,7 @@ import { Message } from '../models/message.model';
     >
       <div class="text"> {{ msg.user }}: {{ msg.text }}</div>
       <div class="time">{{ msg.time }}</div>
-      <div class="avatar"><img [src]="msg.avatar" alt="msg.user" /></div>
+      <div class="avatar"><img [src]="msg.avatar" [alt]="msg.user" /></div>
     </div>
   `,
   styles: [`
