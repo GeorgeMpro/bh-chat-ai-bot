@@ -21,7 +21,8 @@
         "main": "backend/src/main.ts",
         "tsConfig": "backend/tsconfig.app.json",
         "assets": [
-          "backend/src/assets"
+          "backend/src/assets",
+          "backend/src/public"
         ],
         "generatePackageJson": true,
         "esbuildOptions": {
