@@ -5,8 +5,23 @@ import { Message } from '../models/message.model';
 @Component({
   selector: 'app-message-list',
   standalone: true,
-  templateUrl: './message-list.component.html',
-  styleUrls: ['./message-list.component.scss'],
+  template: `
+    <div class="chat-messages">
+      @for (msg of messages; track msg) {
+      <app-message-item [msg]="msg"></app-message-item>
+      }
+    </div>
+  `,
+  styles: [
+    `
+      .chat-messages {
+        flex: 1;
+        padding: 16px;
+        background: #fff;
+        overflow-y: auto;
+      }
+    `,
+  ],
   imports: [MessageItemComponent],
 })
 export class MessageListComponent {
