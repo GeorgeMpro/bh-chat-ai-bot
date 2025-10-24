@@ -11,7 +11,7 @@ const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 const app = express();
 const server = createServer(app);
 
-const io = new Server(server);
+export const io = new Server(server);
 
 const appDir = process.cwd(); // Use the current working directory
 
@@ -21,21 +21,8 @@ app.get('/', (req, res) => {
   res.sendFile(join(appDir, 'backend/src/public', 'index.html'));
 });
 
-io.on('connection', (socket) => {
-  console.log('a user connected');
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-});
-io.on('connection', (socket) => {
-  socket.on('chat message', (msg) => {
-    console.log('message: ' + msg);
-  });
-});
-io.on('connection', (socket) => {
-  socket.on('chat message', (msg) => {
-    io.emit('chat message', msg);
-  });
+io.on('connection', () => {
+  console.log('user connected');
 });
 
 server.listen(port, host, () => {
