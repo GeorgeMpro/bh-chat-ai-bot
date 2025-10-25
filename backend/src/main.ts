@@ -26,13 +26,14 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
   console.log('User connected.');
 
+  const welcomeMessage = 'Welcome to the server!';
+  socket.emit('message', welcomeMessage);
 
-  // socket.emit('countUpdated', count);
-  // socket.on('increment', () => {
-  //   count++;
-  //   notice: emits to all clients
-  // io.emit('countUpdated', count);
-  // });
+  socket.on('sendMessage', (message) => {
+    io.emit('message', message);
+    console.log('Message received', message);
+  });
+
   socket.on('disconnect', () => {
     console.log('User disconnected.');
   });
