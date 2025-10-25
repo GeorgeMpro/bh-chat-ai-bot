@@ -21,6 +21,7 @@
   - [ ] set tone
 - [ ] mock server
 - [ ] real server connection
+- [ ] deploy on Firebase
 
 ### User
 
@@ -49,6 +50,8 @@
 
 - store chat history
   - ?who reacted to your message??
+- logged in users
+- [ ] deploy on Railway
 
 ### Chatbot
 

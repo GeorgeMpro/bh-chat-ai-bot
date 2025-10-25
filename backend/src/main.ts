@@ -5,6 +5,8 @@ import { join } from 'node:path';
 
 import { Server } from 'socket.io';
 
+import { Filter } from 'bad-words';
+
 const host = process.env.HOST ?? 'localhost';
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 
@@ -24,18 +26,29 @@ app.get('/', (req, res) => {
 
 // let count = 0;
 io.on('connection', (socket) => {
-  console.log('User connected.');
-
   const welcomeMessage = 'Welcome to the server!';
-  socket.emit('message', welcomeMessage);
+  const usrConnect = 'A new user has connected.';
+  const usrDisconnected = 'A user has disconnected.';
 
-  socket.on('sendMessage', (message) => {
+  socket.emit('message', welcomeMessage);
+  // all but this user
+
+  socket.broadcast.emit('message', usrConnect);
+
+  socket.on('sendMessage', (message, callback) => {
+    // Notice: filter for faul langauge
+    const filter = new Filter();
+    if (filter.isProfane(message)) {
+      return callback('Profanity not allowed.');
+    }
+
     io.emit('message', message);
-    console.log('Message received', message);
+    callback();
   });
 
   socket.on('disconnect', () => {
-    console.log('User disconnected.');
+    io.emit('message', usrDisconnected);
+    console.log(usrDisconnected);
   });
 });
 
