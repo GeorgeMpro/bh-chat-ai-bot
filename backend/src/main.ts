@@ -1,22 +1,8 @@
 import express from 'express';
-
 import { createServer } from 'node:http';
-import { join } from 'node:path';
-
 import { Server } from 'socket.io';
-
 import { Filter } from 'bad-words';
-import { fileURLToPath } from 'node:url';
-import { dirname } from 'node:path';
 
-import { existsSync } from 'node:fs';
-
-// const host = process.env.HOST ?? 'localhost';
-
-// Recreate __dirname for ES modules
-// @ts-expect-error TS1343: import.meta is valid in ES2022
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 
 const app = express();
@@ -24,70 +10,29 @@ const server = createServer(app);
 
 export const io = new Server(server, {
   cors: {
-    origin: '*', // For development - tighten this in production
+    origin: '*', // For development - will tighten for production
     methods: ['GET', 'POST'],
   },
 });
 
-// const appDir = process.cwd(); // Use the current working directory
-
-// app.use(express.static(join(appDir, 'backend/src/public')));
-// app.get('/', (req, res) => {
-//   res.sendFile(join(appDir, 'index.html'));
-// });
-
-// Serve static files from the public directory
-// app.use(express.static(join(__dirname, 'public')));
-//
-// app.get('/', (req, res) => {
-//   res.sendFile(join(__dirname, 'public/index.html'));
-// });
-// let count = 0;
-
-// Try different paths depending on environment
-// const publicPaths = [
-//   join(__dirname, 'public'), // Production (Railway)
-//   join(process.cwd(), 'backend/src/public'), // Development (local)
-// ];
-//
-// const publicPath =
-//   publicPaths.find((path) => existsSync(path)) || publicPaths[0];
-//
-// console.log(`Serving static files from: ${publicPath}`);
-// app.use(express.static(publicPath));
-const publicPath = join(__dirname, 'public');
-
-console.log(`Attempting to serve from: ${publicPath}`);
-console.log(`Path exists: ${existsSync(publicPath)}`);
-
-if (!existsSync(publicPath)) {
-  console.error(`WARNING: public directory not found at ${publicPath}`);
-  console.log(`Current directory: ${process.cwd()}`);
-  console.log(`__dirname: ${__dirname}`);
-}
-
-app.use(express.static(publicPath));
-
-app.get('/', (req, res) => {
-  res.sendFile(join(publicPath, 'index.html'));
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', message: 'Backend is running!' });
 });
 
-// app.get('/', (req, res) => {
-//   res.sendFile(join(publicPath, 'index.html'));
-// });
-
+// Socket.IO connection handling
 io.on('connection', (socket) => {
   const welcomeMessage = 'Welcome to the server!';
   const usrConnect = 'A new user has connected.';
   const usrDisconnected = 'A user has disconnected.';
 
-  socket.emit('message', welcomeMessage);
-  // all but this user
+  console.log('User connected:', socket.id);
 
+  socket.emit('message', welcomeMessage);
   socket.broadcast.emit('message', usrConnect);
 
   socket.on('sendMessage', (message, callback) => {
-    // Notice: filter for faul language
+    // Filter for profanity
     const filter = new Filter();
     if (filter.isProfane(message)) {
       return callback('Profanity not allowed.');
@@ -99,17 +44,10 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     io.emit('message', usrDisconnected);
-    console.log(usrDisconnected);
+    console.log('User disconnected:', socket.id);
   });
 });
 
-// todo
-// health check
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Backend is running!' });
-});
-
 server.listen(port, '0.0.0.0', () => {
-  console.log(`[ ready ] Server listening on port ${port}`);
+  console.log(`Server listening on port ${port}`);
 });
