@@ -45,20 +45,36 @@ export const io = new Server(server, {
 // let count = 0;
 
 // Try different paths depending on environment
-const publicPaths = [
-  join(__dirname, 'public'), // Production (Railway)
-  join(process.cwd(), 'backend/src/public'), // Development (local)
-];
+// const publicPaths = [
+//   join(__dirname, 'public'), // Production (Railway)
+//   join(process.cwd(), 'backend/src/public'), // Development (local)
+// ];
+//
+// const publicPath =
+//   publicPaths.find((path) => existsSync(path)) || publicPaths[0];
+//
+// console.log(`Serving static files from: ${publicPath}`);
+// app.use(express.static(publicPath));
+const publicPath = join(__dirname, 'public');
 
-const publicPath =
-  publicPaths.find((path) => existsSync(path)) || publicPaths[0];
+console.log(`Attempting to serve from: ${publicPath}`);
+console.log(`Path exists: ${existsSync(publicPath)}`);
 
-console.log(`Serving static files from: ${publicPath}`);
+if (!existsSync(publicPath)) {
+  console.error(`WARNING: public directory not found at ${publicPath}`);
+  console.log(`Current directory: ${process.cwd()}`);
+  console.log(`__dirname: ${__dirname}`);
+}
+
 app.use(express.static(publicPath));
 
 app.get('/', (req, res) => {
   res.sendFile(join(publicPath, 'index.html'));
 });
+
+// app.get('/', (req, res) => {
+//   res.sendFile(join(publicPath, 'index.html'));
+// });
 
 io.on('connection', (socket) => {
   const welcomeMessage = 'Welcome to the server!';
