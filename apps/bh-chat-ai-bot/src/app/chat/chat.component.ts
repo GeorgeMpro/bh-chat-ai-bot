@@ -1,24 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { MessageListComponent } from '../message-list/message-list.component';
 import { MessageInputComponent } from '../message-input/message-input.component';
 import { ChatHeaderComponent } from '../chat-header/chat-header.component';
+import { SocketService } from '../services/socket.service';
+import { Subscription } from 'rxjs';
+import { Message } from '../models/message.model';
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  template: ` <div class="chat-container">
-    <app-chat-header></app-chat-header>
-
-    <app-message-list></app-message-list>
-
-    <app-message-input (send)="onSend($event)"></app-message-input>
-  </div>`,
+  imports: [MessageListComponent, MessageInputComponent, ChatHeaderComponent], // Make sure this is here
+  template: `
+    <div class="chat-container">
+      <app-chat-header />
+      <app-message-list [messages]="messages()" />
+      <app-message-input (send)="onSend($event)" />
+    </div>
+  `,
   styles: [
     `
       .chat-container {
         display: flex;
         flex-direction: column;
-        height: 100%;
+        height: 100vh;
         max-width: 600px;
         margin: 0 auto;
         border: 1px solid #ddd;
@@ -27,11 +31,47 @@ import { ChatHeaderComponent } from '../chat-header/chat-header.component';
       }
     `,
   ],
-  imports: [MessageListComponent, MessageInputComponent, ChatHeaderComponent],
 })
-export class ChatComponent {
-  // todo
-  onSend($event: any) {
-    console.log('message sent');
+export class ChatComponent implements OnInit, OnDestroy {
+  private socketService = inject(SocketService);
+  private messageSubscription?: Subscription;
+
+  // Use signal for reactive state
+  messages = signal<Message[]>([]);
+
+  ngOnInit() {
+    this.messageSubscription = this.socketService
+      .onMessage()
+      .subscribe((msg) => {
+        this.messages.update((msgs) => [
+          ...msgs,
+          {
+            user: 'other',
+            type: 'received',
+            text: msg,
+            time: new Date().toLocaleTimeString('en-US', {
+              hour: '2-digit',
+              minute: '2-digit',
+            }),
+            avatar: 'assets/icons/avatar-bot.png',
+          },
+        ]);
+      });
+  }
+
+  ngOnDestroy() {
+    this.messageSubscription?.unsubscribe();
+  }
+
+  async onSend(message: Message) {
+    // Add user message to UI
+    this.messages.update((msgs) => [...msgs, message]);
+
+    // Send to server (just the text)
+    try {
+      await this.socketService.sendMessage(message.text);
+    } catch (error) {
+      console.error('Failed to send message:', error);
+    }
   }
 }

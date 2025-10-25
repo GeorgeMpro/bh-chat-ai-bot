@@ -51,7 +51,8 @@
 - store chat history
   - ?who reacted to your message??
 - logged in users
-- [ ] deploy on Railway
+- [x] deploy on Railway:
+  - [link](https://bh-chat-ai-bot-production.up.railway.app/)
 
 ### Chatbot
 

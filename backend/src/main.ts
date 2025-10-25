@@ -36,7 +36,6 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', message: 'Backend is running!' });
 });
 
-
 const publicPath = join(__dirname, 'public');
 
 console.log(`Attempting to serve from: ${publicPath}`);
@@ -53,10 +52,6 @@ app.use(express.static(publicPath));
 app.get('/', (req, res) => {
   res.sendFile(join(publicPath, 'index.html'));
 });
-
-// app.get('/', (req, res) => {
-//   res.sendFile(join(publicPath, 'index.html'));
-// });
 
 io.on('connection', (socket) => {
   const welcomeMessage = 'Welcome to the server!';
