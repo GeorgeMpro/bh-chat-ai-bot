@@ -9,6 +9,8 @@ import { Filter } from 'bad-words';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 
+import { existsSync } from 'node:fs';
+
 // const host = process.env.HOST ?? 'localhost';
 
 // Recreate __dirname for ES modules
@@ -27,12 +29,12 @@ export const io = new Server(server, {
   },
 });
 
-const appDir = process.cwd(); // Use the current working directory
+// const appDir = process.cwd(); // Use the current working directory
 
-app.use(express.static(join(appDir, 'backend/src/public')));
-app.get('/', (req, res) => {
-  res.sendFile(join(appDir, 'index.html'));
-});
+// app.use(express.static(join(appDir, 'backend/src/public')));
+// app.get('/', (req, res) => {
+//   res.sendFile(join(appDir, 'index.html'));
+// });
 
 // Serve static files from the public directory
 // app.use(express.static(join(__dirname, 'public')));
@@ -41,6 +43,23 @@ app.get('/', (req, res) => {
 //   res.sendFile(join(__dirname, 'public/index.html'));
 // });
 // let count = 0;
+
+// Try different paths depending on environment
+const publicPaths = [
+  join(__dirname, 'public'), // Production (Railway)
+  join(process.cwd(), 'backend/src/public'), // Development (local)
+];
+
+const publicPath =
+  publicPaths.find((path) => existsSync(path)) || publicPaths[0];
+
+console.log(`Serving static files from: ${publicPath}`);
+app.use(express.static(publicPath));
+
+app.get('/', (req, res) => {
+  res.sendFile(join(publicPath, 'index.html'));
+});
+
 io.on('connection', (socket) => {
   const welcomeMessage = 'Welcome to the server!';
   const usrConnect = 'A new user has connected.';
