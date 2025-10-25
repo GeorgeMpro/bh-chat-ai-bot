@@ -103,6 +103,13 @@ io.on('connection', (socket) => {
   });
 });
 
+// todo
+// health check
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', message: 'Backend is running!' });
+});
+
 server.listen(port, '0.0.0.0', () => {
   console.log(`[ ready ] Server listening on port ${port}`);
 });
