@@ -22,7 +22,11 @@
         "tsConfig": "backend/tsconfig.app.json",
         "assets": [
           "backend/src/assets",
-          "backend/src/public"
+          {
+            "input": "backend/src/public",
+            "glob": "**/*",
+            "output": "public"
+          }
         ],
         "generatePackageJson": true,
         "esbuildOptions": {
