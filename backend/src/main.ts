@@ -6,24 +6,40 @@ import { join } from 'node:path';
 import { Server } from 'socket.io';
 
 import { Filter } from 'bad-words';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
 
-const host = process.env.HOST ?? 'localhost';
+// const host = process.env.HOST ?? 'localhost';
+
+// Recreate __dirname for ES modules
+// @ts-expect-error TS1343: import.meta is valid in ES2022
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 
 const app = express();
 const server = createServer(app);
 
-export const io = new Server(server);
+export const io = new Server(server, {
+  cors: {
+    origin: '*', // For development - tighten this in production
+    methods: ['GET', 'POST'],
+  },
+});
 
 const appDir = process.cwd(); // Use the current working directory
-
-app.use(express.static(join(appDir, 'backend/src/public')));
 
 app.use(express.static(join(appDir, 'backend/src/public')));
 app.get('/', (req, res) => {
   res.sendFile(join(appDir, 'index.html'));
 });
 
+// Serve static files from the public directory
+// app.use(express.static(join(__dirname, 'public')));
+//
+// app.get('/', (req, res) => {
+//   res.sendFile(join(__dirname, 'public/index.html'));
+// });
 // let count = 0;
 io.on('connection', (socket) => {
   const welcomeMessage = 'Welcome to the server!';
@@ -36,7 +52,7 @@ io.on('connection', (socket) => {
   socket.broadcast.emit('message', usrConnect);
 
   socket.on('sendMessage', (message, callback) => {
-    // Notice: filter for faul langauge
+    // Notice: filter for faul language
     const filter = new Filter();
     if (filter.isProfane(message)) {
       return callback('Profanity not allowed.');
@@ -52,6 +68,6 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(port, host, () => {
-  console.log(`[ ready ] http://${host}:${port}`);
+server.listen(port, '0.0.0.0', () => {
+  console.log(`[ ready ] Server listening on port ${port}`);
 });
