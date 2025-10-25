@@ -20,8 +20,8 @@
   - [ ] query online a solution
   - [ ] set tone
 - [ ] mock server
-- [ ] real server connection
-- [ ] deploy on Firebase
+- [x] real server connection
+- [x] deploy on Firebase
 
 ### User
 

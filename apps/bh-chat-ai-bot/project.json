@@ -8,12 +8,16 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/bh-chat-ai-bot",
         "index": "apps/bh-chat-ai-bot/src/index.html",
         "main": "apps/bh-chat-ai-bot/src/main.ts",
-        "polyfills": ["zone.js"],
+        "polyfills": [
+          "zone.js"
+        ],
         "tsConfig": "apps/bh-chat-ai-bot/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
@@ -22,7 +26,9 @@
             "input": "apps/bh-chat-ai-bot/public"
           }
         ],
-        "styles": ["apps/bh-chat-ai-bot/src/styles.scss"]
+        "styles": [
+          "apps/bh-chat-ai-bot/src/styles.scss"
+        ]
       },
       "configurations": {
         "production": {
@@ -46,7 +52,13 @@
           "vendorChunk": true,
           "extractLicenses": false,
           "sourceMap": true,
-          "namedChunks": true
+          "namedChunks": true,
+          "fileReplacements": [
+            {
+              "replace": "apps/bh-chat-ai-bot/src/environments/environment.ts",
+              "with": "apps/bh-chat-ai-bot/src/environments/environment.development.ts"
+            }
+          ]
         }
       },
       "defaultConfiguration": "production"
@@ -75,7 +87,9 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
       "options": {
         "jestConfig": "apps/bh-chat-ai-bot/jest.config.ts",
         "tsConfig": "apps/bh-chat-ai-bot/tsconfig.spec.json"

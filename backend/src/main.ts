@@ -60,7 +60,6 @@ io.on('connection', (socket) => {
 
   socket.emit('message', welcomeMessage);
   // all but this user
-
   socket.broadcast.emit('message', usrConnect);
 
   socket.on('sendMessage', (message, callback) => {
@@ -70,7 +69,7 @@ io.on('connection', (socket) => {
       return callback('Profanity not allowed.');
     }
 
-    io.emit('message', message);
+    socket.broadcast.emit('message', message);
     callback();
   });
 
