@@ -22,15 +22,22 @@ app.get('/', (req, res) => {
   res.sendFile(join(appDir, 'index.html'));
 });
 
-
-let count = 0;
+// let count = 0;
 io.on('connection', (socket) => {
-  console.log('user connected');
+  console.log('User connected.');
 
-  socket.emit('countUpdated');
+
+  // socket.emit('countUpdated', count);
+  // socket.on('increment', () => {
+  //   count++;
+  //   notice: emits to all clients
+  // io.emit('countUpdated', count);
+  // });
+  socket.on('disconnect', () => {
+    console.log('User disconnected.');
+  });
 });
 
 server.listen(port, host, () => {
   console.log(`[ ready ] http://${host}:${port}`);
-  console.log(appDir);
 });
