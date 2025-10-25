@@ -1,19 +1,13 @@
 import express from 'express';
-
 import { createServer } from 'node:http';
 import { join } from 'node:path';
-
 import { Server } from 'socket.io';
-
 import { Filter } from 'bad-words';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
-
 import { existsSync } from 'node:fs';
+import { getBotResponse, shouldBotRespond } from './services/bot.service.js';
 
-// const host = process.env.HOST ?? 'localhost';
-
-// Recreate __dirname for ES modules
 // @ts-expect-error TS1343: import.meta is valid in ES2022
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -24,14 +18,11 @@ const server = createServer(app);
 
 export const io = new Server(server, {
   cors: {
-    origin: '*', // For development - tighten this in production
+    origin: '*',
     methods: ['GET', 'POST'],
   },
 });
 
-// todo
-// health check
-// Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', message: 'Backend is running!' });
 });
@@ -59,26 +50,37 @@ io.on('connection', (socket) => {
   const usrDisconnected = 'A user has disconnected.';
 
   socket.emit('message', welcomeMessage);
-  // all but this user
   socket.broadcast.emit('message', usrConnect);
 
-  socket.on('sendMessage', (message, callback) => {
-    // Notice: filter for faul language
+  socket.on('sendMessage', async (message, callback) => {
     const filter = new Filter();
     if (filter.isProfane(message)) {
       return callback('Profanity not allowed.');
     }
 
+    // Broadcast user message to others
     socket.broadcast.emit('message', message);
+
+    // Check if bot should respond
+    if (shouldBotRespond(message)) {
+      try {
+        const botResponse = await getBotResponse(message);
+        // Send bot response to everyone
+        io.emit('message', `🤖 HelpBot: ${botResponse}`);
+      } catch (error) {
+        console.error('Bot error:', error);
+      }
+    }
+
     callback();
   });
 
   socket.on('disconnect', () => {
     io.emit('message', usrDisconnected);
-    console.log(usrDisconnected);
+    console.log('User disconnected:', socket.id);
   });
 });
 
 server.listen(port, '0.0.0.0', () => {
-  console.log(`[ ready ] Server listening on port ${port}`);
+  console.log(`Server listening on port ${port}`);
 });
