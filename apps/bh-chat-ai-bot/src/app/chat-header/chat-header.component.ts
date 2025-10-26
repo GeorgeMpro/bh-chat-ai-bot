@@ -53,21 +53,10 @@ export class ChatHeaderComponent {
     }
   }
 
-  /**
-   * Shows confirmation dialog for logout
-   *
-   * @private
-   * @returns {boolean} True if user confirms logout
-   */
   private confirmLogout(): boolean {
     return confirm(this.LOGOUT_CONFIRMATION);
   }
 
-  /**
-   * Performs the logout operation
-   *
-   * @private
-   */
   private performLogout(): void {
     this.userService.logout();
   }

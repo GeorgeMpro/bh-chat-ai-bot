@@ -45,35 +45,12 @@ export class LoginComponent {
 
   protected selectedAvatar = signal(this.getRandomAvatar());
 
-  /**
-   * Handles login button click or Enter key press
-   *
-   * @description
-   * Validates the username and logs in the user if valid.
-   * Trims whitespace and ensures username is not empty.
-   *
-   * @example
-   * ```typescript
-   * // User enters "Alice" and clicks Join
-   * handleLogin(); // Sets user to "Alice" with selected avatar
-   * ```
-   */
   protected handleLogin(): void {
     if (this.isValidUsername()) {
       this.performLogin();
     }
   }
 
-  /**
-   * Selects an avatar from the grid
-   *
-   * @param {string} emoji - The emoji to select
-   *
-   * @example
-   * ```typescript
-   * selectAvatar('😊'); // Updates selected avatar
-   * ```
-   */
   protected selectAvatar(emoji: string): void {
     this.selectedAvatar.set(emoji);
   }

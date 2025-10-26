@@ -63,26 +63,11 @@ export class ChatComponent implements OnInit, OnDestroy {
   isLoggedIn = computed(() => this.userService.user() !== null);
   messages = signal<Message[]>([]);
 
-  /**
-   * Component initialization lifecycle hook
-   *
-   * @description
-   * Sets up the component by:
-   * 1. Loading persisted user data from localStorage
-   * 2. Subscribing to incoming socket messages
-   * 3. Setting up message handlers
-   */
   ngOnInit(): void {
     this.loadUserData();
     this.subscribeToMessages();
   }
 
-  /**
-   * Component cleanup lifecycle hook
-   *
-   * @description
-   * Cleans up subscriptions to prevent memory leaks
-   */
   ngOnDestroy(): void {
     this.unsubscribeFromMessages();
   }

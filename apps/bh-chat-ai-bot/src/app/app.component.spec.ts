@@ -8,7 +8,7 @@ describe('AppComponent', () => {
     }).compileComponents();
   });
 
-  it('should have a test', () => {
+  it('should  test nothing', () => {
     expect(true).toBe(true);
   });
 });
