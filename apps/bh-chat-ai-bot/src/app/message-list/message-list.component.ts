@@ -15,13 +15,14 @@ import { Message } from '../models/message.model';
   styles: [
     `
       .chat-messages {
-        flex: 1;
+        position: absolute; // ABSOLUTE POSITIONING
+        top: 73px; // HEIGHT OF HEADER (adjust if needed)
+        bottom: 73px; // HEIGHT OF INPUT (adjust if needed)
+        left: 0;
+        right: 0;
         padding: 20px;
         background: #f5f7fb;
         overflow-y: auto;
-        min-height: 0;
-
-        /* Custom scrollbar */
 
         &::-webkit-scrollbar {
           width: 6px;
@@ -38,6 +39,7 @@ import { Message } from '../models/message.model';
       }
     `,
   ],
+
   imports: [MessageItemComponent],
 })
 export class MessageListComponent {

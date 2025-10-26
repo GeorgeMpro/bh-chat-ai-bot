@@ -8,9 +8,16 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
-  display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.content {
+  min-height: 100vh;
+  width: 100vw; /* <-- key: give it width */
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
 }
 
 html, body {

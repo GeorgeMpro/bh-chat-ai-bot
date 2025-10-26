@@ -6,12 +6,8 @@ import { Component } from '@angular/core';
     <header class="chat-header">
       <div class="header-content">
         <h2>{{ title }}</h2>
+        <!--        todo add how many users connected-->
         <p class="subtitle">{{ subtitle }}</p>
-      </div>
-      <div class="header-actions">
-        <button class="icon-btn">🔍</button>
-        <button class="icon-btn">📞</button>
-        <button class="icon-btn">⋮</button>
       </div>
     </header>
   `,
@@ -22,7 +18,7 @@ import { Component } from '@angular/core';
         justify-content: space-between;
         align-items: center;
         padding: 16px 20px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: #2d3748;
         color: white;
       }
 
@@ -67,5 +63,5 @@ import { Component } from '@angular/core';
 })
 export class ChatHeaderComponent {
   title = 'Chat With Bot';
-  subtitle = '23 members, 10 online';
+  subtitle = 'x users connected';
 }

@@ -20,13 +20,18 @@ import { Message } from '../models/message.model';
   styles: [
     `
       .chat-input {
+        position: absolute; // FIXED POSITION
+        bottom: 0;
+        left: 0;
+        right: 0;
         display: flex;
         align-items: center;
         padding: 16px 20px;
         background: white;
         border-top: 1px solid #e2e8f0;
         gap: 12px;
-        flex-shrink: 0;
+        border-radius: 0 0 16px 16px;
+        z-index: 10; // ENSURE IT'S ON TOP
 
         input[type='text'] {
           flex: 1;
