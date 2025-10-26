@@ -11,7 +11,7 @@ import { MessageInputComponent } from '../message-input/message-input.component'
 import { ChatHeaderComponent } from '../chat-header/chat-header.component';
 import { SocketService } from '../services/socket.service';
 import { Subscription } from 'rxjs';
-import { Message } from '../models/message.model';
+import { Message, ServerMessage } from '../models/message.model';
 import { LoginComponent } from '../login/login.component';
 import { UserService } from '../services/user.service';
 
@@ -23,7 +23,7 @@ import { UserService } from '../services/user.service';
     MessageInputComponent,
     ChatHeaderComponent,
     LoginComponent,
-  ], // Make sure this is here
+  ],
   template: `
     @if (!user()) {
     <app-login />
@@ -63,55 +63,64 @@ export class ChatComponent implements OnInit, OnDestroy {
   private messageSubscription?: Subscription;
 
   user = computed(() => this.userService.user());
-
   isLoggedIn = computed(() => this.userService.user() !== null);
-
-  // Use signal for reactive state
   messages = signal<Message[]>([]);
 
   ngOnInit() {
-    // keep if you already call it
-    if ((this as any).userService?.loadUser) {
-      (this as any).userService.loadUser();
-    }
+    this.userService.loadUser();
 
     this.messageSubscription = this.socketService
       .onMessage()
-      .subscribe((msg: any) => {
-        const isObj = msg && typeof msg === 'object';
+      .subscribe((msg: string | ServerMessage) => {
+        if (typeof msg === 'string') {
+          this.messages.update((list) => [
+            ...list,
+            {
+              user: 'System',
+              type: 'received',
+              text: msg,
+              time: new Date().toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+              }),
+              avatar: '🔔', // System notification icon
+            },
+          ]);
+          return;
+        }
 
-        const username = isObj ? String(msg.username ?? 'system') : 'system';
-        const text = isObj ? String(msg.text ?? '') : String(msg ?? '');
-        const when = isObj && msg.time ? new Date(msg.time) : new Date();
-
+        const serverMsg = msg as ServerMessage;
         this.messages.update((list) => [
           ...list,
           {
-            user: username, // <-- show username from server
+            user: serverMsg.username,
             type: 'received',
-            text,
-            time: when.toLocaleTimeString('en-US', {
+            text: serverMsg.text,
+            time: new Date(serverMsg.time).toLocaleTimeString('en-US', {
               hour: '2-digit',
               minute: '2-digit',
             }),
-            avatar: 'assets/icons/avatar-bot.png',
+            avatar: serverMsg.avatar || '😀', // Use avatar from server
           },
         ]);
       });
   }
-
   ngOnDestroy() {
     this.messageSubscription?.unsubscribe();
   }
 
   async onSend(message: Message) {
-    // optimistic UI
+    // Optimistic UI update
     this.messages.update((msgs) => [...msgs, message]);
 
     try {
+      const currentUser = this.userService.user();
+
+      // ✅ STEP 3C: Send message with avatar to server
       await this.socketService.sendMessage({
         text: message.text,
         username: message.user,
+        avatar: currentUser?.avatar || '😀',
       });
     } catch (error) {
       console.error('Failed to send message:', error);

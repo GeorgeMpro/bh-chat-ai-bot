@@ -22,8 +22,9 @@ export class SocketService {
     });
   }
 
+
   sendMessage(
-    message: string | { text: string; username: string }
+    message: string | { text: string; username: string; avatar: string }
   ): Promise<void> {
     return new Promise((resolve, reject) => {
       this.socket.emit('sendMessage', message, (error?: string) => {
@@ -35,6 +36,7 @@ export class SocketService {
       });
     });
   }
+
 
   onMessage(): Observable<string | ServerMessage> {
     return new Observable((observer) => {

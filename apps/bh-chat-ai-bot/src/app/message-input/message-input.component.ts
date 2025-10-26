@@ -99,16 +99,16 @@ export class MessageInputComponent {
 
   sendMessage() {
     const user = this.userService.user();
-    if (this.messageText.trim()) {
+    if (this.messageText.trim() && user) {
       const message: Message = {
-        user: user!.username,
+        user: user.username,
         type: 'sent',
         text: this.messageText,
         time: new Date().toLocaleTimeString('en-US', {
           hour: '2-digit',
           minute: '2-digit',
         }),
-        avatar: 'assets/icons/avatar-user.png',
+        avatar: user.avatar, // Use user's emoji avatar
       };
 
       this.send.emit(message);

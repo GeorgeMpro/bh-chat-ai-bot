@@ -7,30 +7,30 @@ import { NgClass } from '@angular/common';
   standalone: true,
   imports: [NgClass],
  template: `
-  <div class="message" [ngClass]="msg().type">
-    @if (msg().type === 'received') {
-      <img [src]="msg().avatar" [alt]="msg().user" class="avatar" />
-    }
+   <div class="message" [ngClass]="msg().type">
+     @if (msg().type === 'received') {
+       <div class="avatar-emoji">{{ msg().avatar }}</div>
+     }
 
-    <div class="message-content">
-      <div class="message-bubble">
-        @if (msg().type === 'received') {
-          <div class="message-header">
-            <span class="username">{{ msg().user }}</span>
-          </div>
-        }
-        <p>{{ msg().text }}</p>
-        <div class="message-footer">
-          <span class="time">{{ msg().time }}</span>
-        </div>
-      </div>
-    </div>
+     <div class="message-content">
+       <div class="message-bubble">
+         @if (msg().type === 'received') {
+           <div class="message-header">
+             <span class="username">{{ msg().user }}</span>
+           </div>
+         }
+         <p>{{ msg().text }}</p>
+         <div class="message-footer">
+           <span class="time">{{ msg().time }}</span>
+         </div>
+       </div>
+     </div>
 
-    @if (msg().type === 'sent') {
-      <img [src]="msg().avatar" [alt]="msg().user" class="avatar" />
-    }
-  </div>
-`,
+     @if (msg().type === 'sent') {
+       <div class="avatar-emoji">{{ msg().avatar }}</div>
+     }
+   </div>
+ `,
   styles: [
     `
       .message {
@@ -63,12 +63,17 @@ import { NgClass } from '@angular/common';
           }
         }
 
-        .avatar {
-          width: 32px; // Reduced from 40px
-          height: 32px; // Reduced from 40px
+        .avatar-emoji {
+          width: 34px;
+          height: 34px;
           border-radius: 50%;
-          object-fit: cover;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1rem;
+          background: #f7fafc;
           flex-shrink: 0;
+          border: 2px solid #e2e8f0;
         }
 
         .message-content {
