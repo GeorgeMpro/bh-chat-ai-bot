@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { ServerMessage } from '../models/message.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,9 @@ export class SocketService {
     });
   }
 
-  sendMessage(message: string): Promise<void> {
+  sendMessage(
+    message: string | { text: string; username: string }
+  ): Promise<void> {
     return new Promise((resolve, reject) => {
       this.socket.emit('sendMessage', message, (error?: string) => {
         if (error) {
@@ -33,9 +36,9 @@ export class SocketService {
     });
   }
 
-  onMessage(): Observable<string> {
+  onMessage(): Observable<string | ServerMessage> {
     return new Observable((observer) => {
-      this.socket.on('message', (msg: string) => {
+      this.socket.on('message', (msg: string | ServerMessage) => {
         observer.next(msg);
       });
 

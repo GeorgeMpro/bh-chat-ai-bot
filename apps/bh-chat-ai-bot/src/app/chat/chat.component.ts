@@ -68,20 +68,56 @@ export class ChatComponent implements OnInit, OnDestroy {
   // Use signal for reactive state
   messages = signal<Message[]>([]);
 
+  // ngOnInit() {
+  //   // Load user from localStorage
+  //   this.userService.loadUser();
+  //
+  //   this.messageSubscription = this.socketService
+  //     .onMessage()
+  //     .subscribe((msg: any) => {
+  //       const isObj = msg !== null && typeof msg === 'object';
+  //
+  //       const username = isObj ? String(msg.username ?? 'anonymous') : 'system';
+  //       const text = isObj ? String(msg.text ?? '') : String(msg ?? '');
+  //       const date = isObj && msg.time ? new Date(msg.time) : new Date();
+  //
+  //       this.messages.update((msgs) => [
+  //         ...msgs,
+  //         {
+  //           user: username, // <-- use server username; stops showing "other"
+  //           type: 'received',
+  //           text,
+  //           time: date.toLocaleTimeString('en-US', {
+  //             hour: '2-digit',
+  //             minute: '2-digit',
+  //           }),
+  //           avatar: 'assets/icons/avatar-bot.png',
+  //         },
+  //       ]);
+  //     });
+  // }
   ngOnInit() {
-    // Load user from localStorage
-    this.userService.loadUser();
+    // keep if you already call it
+    if ((this as any).userService?.loadUser) {
+      (this as any).userService.loadUser();
+    }
 
     this.messageSubscription = this.socketService
       .onMessage()
-      .subscribe((msg) => {
-        this.messages.update((msgs) => [
-          ...msgs,
+      .subscribe((msg: any) => {
+        const isObj = msg && typeof msg === 'object';
+
+        const username = isObj ? String(msg.username ?? 'system') : 'system';
+        const text = isObj ? String(msg.text ?? '') : String(msg ?? '');
+        const when = isObj && msg.time ? new Date(msg.time) : new Date();
+
+        this.messages.update((list) => [
+          ...list,
           {
-            user: msg ?? 'other',
+            user: username, // <-- show username from server
             type: 'received',
-            text: msg,
-            time: new Date().toLocaleTimeString('en-US', {
+            text,
+            time: when.toLocaleTimeString('en-US', {
               hour: '2-digit',
               minute: '2-digit',
             }),
@@ -96,12 +132,15 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   async onSend(message: Message) {
-    // Add user message to UI
+    // optimistic UI
     this.messages.update((msgs) => [...msgs, message]);
 
-    // Send to server (just the text)
+    // IMPORTANT: send username so server stops labeling as "anonymous"
     try {
-      await this.socketService.sendMessage(message.text);
+      await this.socketService.sendMessage({
+        text: message.text,
+        username: message.user,
+      });
     } catch (error) {
       console.error('Failed to send message:', error);
     }
