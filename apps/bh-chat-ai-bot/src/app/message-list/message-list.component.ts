@@ -8,16 +8,16 @@ import { Message } from '../models/message.model';
   template: `
     <div class="chat-messages">
       @for (msg of messages(); track $index) {
-      <app-message-item [msg]="msg" />
+        <app-message-item [msg]="msg" />
       }
     </div>
   `,
   styles: [
     `
       .chat-messages {
-        position: absolute; // ABSOLUTE POSITIONING
-        top: 73px; // HEIGHT OF HEADER (adjust if needed)
-        bottom: 73px; // HEIGHT OF INPUT (adjust if needed)
+        position: absolute;
+        top: 73px;
+        bottom: 73px;
         left: 0;
         right: 0;
         padding: 20px;

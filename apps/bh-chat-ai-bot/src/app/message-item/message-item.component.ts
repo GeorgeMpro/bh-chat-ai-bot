@@ -6,31 +6,31 @@ import { NgClass } from '@angular/common';
   selector: 'app-message-item',
   standalone: true,
   imports: [NgClass],
-  template: `
-    <div class="message" [ngClass]="msg().type">
-      @if (msg().type === 'received') {
-        <img [src]="msg().avatar" [alt]="msg().user" class="avatar" />
-      }
+ template: `
+  <div class="message" [ngClass]="msg().type">
+    @if (msg().type === 'received') {
+      <img [src]="msg().avatar" [alt]="msg().user" class="avatar" />
+    }
 
-      <div class="message-content">
+    <div class="message-content">
+      <div class="message-bubble">
         @if (msg().type === 'received') {
           <div class="message-header">
             <span class="username">{{ msg().user }}</span>
           </div>
         }
-        <div class="message-bubble">
-          <p>{{ msg().text }}</p>
-        </div>
+        <p>{{ msg().text }}</p>
         <div class="message-footer">
           <span class="time">{{ msg().time }}</span>
         </div>
       </div>
-
-      @if (msg().type === 'sent') {
-        <img [src]="msg().avatar" [alt]="msg().user" class="avatar" />
-      }
     </div>
-  `,
+
+    @if (msg().type === 'sent') {
+      <img [src]="msg().avatar" [alt]="msg().user" class="avatar" />
+    }
+  </div>
+`,
   styles: [
     `
       .message {
@@ -87,25 +87,35 @@ import { NgClass } from '@angular/common';
         }
 
         .message-bubble {
-          padding: 8px 12px; // Reduced from 12px 16px
+          padding: 8px 12px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          display: flex; // ADD THIS
+          flex-direction: column; // ADD THIS
 
           p {
-            margin: 0;
-            line-height: 1.4; // Reduced from 1.5
-            font-size: 13px; // Reduced from 14px
+            margin: 0 0 4px 0; // ADD MARGIN BOTTOM
+            line-height: 1.4;
+            font-size: 13px;
           }
         }
 
         .message-footer {
           display: flex;
-          align-items: center;
-          gap: 8px;
+          justify-content: flex-end; // ALIGN RIGHT
+          margin-top: auto; // PUSH TO BOTTOM
 
           .time {
-            font-size: 11px;
-            color: #a0aec0;
+            font-size: 10px;
+            opacity: 0.7; // MAKE IT SUBTLE
           }
+        }
+
+        .sent .message-footer .time {
+          color: rgba(255, 255, 255, 0.8); // WHITE FOR SENT MESSAGES
+        }
+
+        .received .message-footer .time {
+          color: #a0aec0; // GRAY FOR RECEIVED
         }
       }
     `,
