@@ -55,7 +55,7 @@ import { Message } from '../models/message.model';
 
         .send-button {
           padding: 12px 24px;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: #2d3748;
           color: white;
           border: none;
           border-radius: 24px;
