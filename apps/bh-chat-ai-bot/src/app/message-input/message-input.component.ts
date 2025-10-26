@@ -21,33 +21,35 @@ import { UserService } from '../services/user.service';
   `,
   styles: [
     `
+      @use '../../styles/variables' as *;
+
       .chat-input {
-        position: absolute; // FIXED POSITION
+        position: absolute;
         bottom: 0;
         left: 0;
         right: 0;
         display: flex;
         align-items: center;
-        padding: 16px 20px;
-        background: white;
+        padding: $padding-header;
+        background: $chat-body-text;
         border-top: 1px solid #e2e8f0;
-        gap: 12px;
+        gap: $gap-small;
         border-radius: 0 0 16px 16px;
         z-index: 10; // ENSURE IT'S ON TOP
 
         input[type='text'] {
           flex: 1;
-          padding: 12px 16px;
+          padding: $padding-input-text;
           border: 1px solid #e2e8f0;
-          border-radius: 24px;
-          font-size: 14px;
-          background: #f7fafc;
+          border-radius: $border-radius-5;
+          font-size: $font-size-1;
+          background: $input-background;
           transition: all 0.2s;
 
           &:focus {
             outline: none;
-            border-color: #667eea;
-            background: white;
+            border-color: $border-focus;
+            background: $chat-body-text;
           }
 
           &::placeholder {
@@ -61,14 +63,14 @@ import { UserService } from '../services/user.service';
         }
 
         .send-button {
-          padding: 12px 24px;
-          background: #2d3748;
-          color: white;
+          padding: $send-button-padding;
+          background: $chat-body-background;
+          color: $chat-body-text;
           border: none;
-          border-radius: 24px;
+          border-radius: $border-radius-5;
           cursor: pointer;
-          font-weight: 600;
-          font-size: 14px;
+          font-weight: $font-weight-semibold;
+          font-size: $font-size-1;
           transition: transform 0.2s;
 
           &:hover:not(:disabled) {

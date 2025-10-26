@@ -60,14 +60,15 @@
 
 ## Design
 
-- [ ] go over chat examples
-- [ ] responsive to different screen sizes
+- [x] go over chat examples
+- [x] responsive to different screen sizes
 - [ ] consideration for accessibility(A11y)
 - ? dark mode?
 
 ## Polish / Doco / Deployment
 
-- firebase
+- [x] firebase
+- [x] railway
 - [ ]  readme
 - [ ]  extract reusable design
 - setup

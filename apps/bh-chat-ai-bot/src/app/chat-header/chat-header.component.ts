@@ -12,34 +12,36 @@ import { User, UserService } from '../services/user.service';
       </div>
 
       @if (userService.user(); as user) {
-      <div class="user-info">
-        <span class="user-avatar">{{ user.avatar }}</span>
-        <span class="username">{{ user.username }}</span>
-        <button class="logout-btn" (click)="logout()">Logout</button>
-      </div>
+        <div class="user-info">
+          <span class="user-avatar">{{ user.avatar }}</span>
+          <span class="username">{{ user.username }}</span>
+          <button class="logout-btn" (click)="logout()">Logout</button>
+        </div>
       }
     </header>
   `,
   styles: [
     `
+      @use '../../styles/variables' as *;
+
       .chat-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 16px 20px;
-        background: #2d3748;
-        color: white;
+        padding: $padding-header;
+        background: $chat-body-background;
+        color: $chat-body-text;
       }
 
       .header-content {
         h2 {
-          font-size: 18px;
-          font-weight: 600;
+          font-size: $font-size-3;
+          font-weight: $font-weight-semibold;
           margin: 0;
         }
 
         .subtitle {
-          font-size: 12px;
+          font-size: $font-size-1;
           opacity: 0.9;
           margin: 4px 0 0 0;
         }
@@ -47,60 +49,42 @@ import { User, UserService } from '../services/user.service';
 
       .header-actions {
         display: flex;
-        gap: 12px;
-
-        .icon-btn {
-          background: rgba(255, 255, 255, 0.2);
-          border: none;
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          cursor: pointer;
-          font-size: 16px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: background 0.2s;
-
-          &:hover {
-            background: rgba(255, 255, 255, 0.3);
-          }
-        }
+        gap: $gap-small;
       }
 
       .user-info {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: $gap-small;
 
         .user-avatar {
-          font-size: 24px;
+          font-size: $font-size-4;
           width: 40px;
           height: 40px;
           display: flex;
           align-items: center;
           justify-content: center;
-          background: rgba(255, 255, 255, 0.1);
+          background: $avatar-background;
           border-radius: 50%;
         }
 
         .username {
-          font-weight: 600;
-          font-size: 14px;
+          font-weight: $font-weight-semibold;
+          font-size: $font-size-2;
         }
 
         .logout-btn {
-          padding: 6px 12px;
-          background: rgba(255, 255, 255, 0.2);
+          padding: $padding-small;
+          background: $logout-background;
           border: none;
-          border-radius: 6px;
-          color: white;
+          border-radius: $border-radius-1;
+          color: $chat-body-text;
           cursor: pointer;
-          font-size: 12px;
+          font-size: $font-size-1;
           transition: background 0.2s;
 
           &:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: $logout-background-hover;
           }
         }
       }

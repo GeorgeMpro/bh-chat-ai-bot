@@ -9,7 +9,7 @@ import { UserService } from '../services/user.service';
   template: `
     <div class="login-overlay">
       <div class="login-card">
-        <h2>Welcome to Chat!</h2>
+        <h2>Welcome to the Chat</h2>
         <p>Choose your username and avatar</p>
 
         <div class="form-group">
@@ -50,13 +50,15 @@ import { UserService } from '../services/user.service';
   `,
   styles: [
     `
+      @use '../../styles/variables' as *;
+
       .login-overlay {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
+        background: $login-overlay-background;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -65,20 +67,20 @@ import { UserService } from '../services/user.service';
 
       .login-card {
         background: white;
-        border-radius: 16px;
-        padding: 32px;
+        border-radius: $border-radius-3;
+        padding: $padding-large;
         max-width: 400px;
         width: 90%;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        box-shadow: $login-card-shadow;
 
         h2 {
           margin: 0 0 8px 0;
-          color: #2d3748;
+          color: $chat-body-background;
         }
 
         p {
           margin: 0 0 24px 0;
-          color: #718096;
+          color: $login-modal-p-text;
         }
       }
 
@@ -88,20 +90,20 @@ import { UserService } from '../services/user.service';
         label {
           display: block;
           margin-bottom: 8px;
-          font-weight: 600;
-          color: #2d3748;
+          font-weight: $font-weight-semibold;
+          color: $chat-body-background;
         }
 
         input {
           width: 100%;
-          padding: 12px;
+          padding: $gap-small;
           border: 2px solid #e2e8f0;
-          border-radius: 8px;
-          font-size: 14px;
+          border-radius: $border-radius-3;
+          font-size: $font-size-1;
 
           &:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: $border-focus;
           }
         }
       }
@@ -123,24 +125,24 @@ import { UserService } from '../services/user.service';
         transition: all 0.2s;
 
         &:hover {
-          border-color: #667eea;
+          border-color: $border-focus;
           transform: scale(1.1);
         }
 
         &.selected {
-          border-color: #667eea;
-          background: #eef2ff;
+          border-color: $border-focus;
+          background: $avatar-selected;
         }
       }
 
       .login-btn {
         width: 100%;
-        padding: 12px;
+        padding: $gap-small;
         background: #2d3748;
         color: white;
         border: none;
-        border-radius: 8px;
-        font-weight: 600;
+        border-radius: $border-radius-1;
+        font-weight: $font-weight-semibold;
         cursor: pointer;
         transition: transform 0.2s;
 

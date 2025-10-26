@@ -39,19 +39,20 @@ import { UserService } from '../services/user.service';
   `,
   styles: [
     `
+      @use '../../styles/variables' as *;
+
       .chat-container {
         display: flex;
         flex-direction: column;
         height: 90vh;
-        //max-height: 800px;
         width: 100%;
         max-width: 900px;
         margin: 20px auto;
         background: white;
-        border-radius: 16px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        border-radius: $border-radius-3;
+        box-shadow: $chat-shadow;
         overflow: hidden;
-        position: relative; // ADD THIS
+        position: relative;
       }
     `,
   ],
@@ -68,34 +69,6 @@ export class ChatComponent implements OnInit, OnDestroy {
   // Use signal for reactive state
   messages = signal<Message[]>([]);
 
-  // ngOnInit() {
-  //   // Load user from localStorage
-  //   this.userService.loadUser();
-  //
-  //   this.messageSubscription = this.socketService
-  //     .onMessage()
-  //     .subscribe((msg: any) => {
-  //       const isObj = msg !== null && typeof msg === 'object';
-  //
-  //       const username = isObj ? String(msg.username ?? 'anonymous') : 'system';
-  //       const text = isObj ? String(msg.text ?? '') : String(msg ?? '');
-  //       const date = isObj && msg.time ? new Date(msg.time) : new Date();
-  //
-  //       this.messages.update((msgs) => [
-  //         ...msgs,
-  //         {
-  //           user: username, // <-- use server username; stops showing "other"
-  //           type: 'received',
-  //           text,
-  //           time: date.toLocaleTimeString('en-US', {
-  //             hour: '2-digit',
-  //             minute: '2-digit',
-  //           }),
-  //           avatar: 'assets/icons/avatar-bot.png',
-  //         },
-  //       ]);
-  //     });
-  // }
   ngOnInit() {
     // keep if you already call it
     if ((this as any).userService?.loadUser) {
@@ -135,7 +108,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     // optimistic UI
     this.messages.update((msgs) => [...msgs, message]);
 
-    // IMPORTANT: send username so server stops labeling as "anonymous"
     try {
       await this.socketService.sendMessage({
         text: message.text,
