@@ -88,26 +88,6 @@ A real-time chat application with an AI-powered bot that assists with Angular an
          └───────────────────────────────────────────────┘
 ```
 
-### Data Flow
-
-```
-User Input → MessageInputComponent 
-    → ChatComponent 
-    → SocketService 
-    → Server (chat.service)
-    → Broadcast to all clients
-    → SocketService (receive)
-    → ChatComponent (update)
-    → MessageListComponent (display)
-```
-
-### State Management
-
-- **UserService**: Manages user authentication and avatar selection
-- **SocketService**: Handles WebSocket connections and message transmission
-- **ChatComponent**: Central state management with Angular signals
-- **LocalStorage**: Persists user data across sessions
-
 ---
 
 ## 🚀 Getting Started
@@ -246,38 +226,6 @@ The bot responds when messages contain:
 
 ---
 
-## 🔮 Future Enhancements
-
-### Planned Features
-
-- [ ] **Message Reactions**: Quick emoji reactions (👍, ❤️, 😂, etc.)
-- [ ] **Message Editing**: Edit sent messages with history tracking
-- [ ] **Message Deletion**: Delete own messages
-- [ ] **User List**: See all connected users with their avatars
-- [ ] **Typing Indicators**: "User is typing..." status
-- [ ] **Read Receipts**: Message read status
-- [ ] **Code Syntax Highlighting**: For code snippets in messages
-- [ ] **File Sharing**: Upload and share images/files
-- [ ] **Voice Messages**: Record and send audio messages
-- [ ] **Message Search**: Search through chat history
-- [ ] **Dark Mode Toggle**: User preference for theme
-- [ ] **Custom Themes**: Multiple color scheme options
-- [ ] **Notification Sounds**: Audio feedback for new messages
-- [ ] **Message Persistence**: Database integration for history
-- [ ] **User Authentication**: OAuth integration (Google, GitHub)
-
-### Bot Enhancements
-
-- [ ] **Context Awareness**: Remember conversation context
-- [ ] **Code Execution**: Run code snippets safely
-- [ ] **Multi-language Support**: Respond in different languages
-- [ ] **Personality Modes**: Switch between different bot personalities
-- [ ] **Custom Commands**: `/help`, `/commands`, etc.
-- [ ] **Bot Training**: Learn from chat interactions
-- [ ] **Multiple AI Models**: Switch between different AI providers
-
----
-
 ## 🧪 Testing
 
 ### Unit Tests
@@ -319,3 +267,37 @@ socket.on('message', (message: ServerMessage | string) => {
   // Handle message
 })
 ```
+
+---
+
+## 🔮 Future Enhancements
+
+### Planned Features
+
+- [ ] **Message Reactions**: Quick emoji reactions (👍, ❤️, 😂, etc.)
+- [ ] **Message Editing**: Edit sent messages with history tracking
+- [ ] **Message Deletion**: Delete own messages
+- [ ] **User List**: See all connected users with their avatars
+- [ ] **Typing Indicators**: "User is typing..." status
+- [ ] **Read Receipts**: Message read status
+- [ ] **Code Syntax Highlighting**: For code snippets in messages
+- [ ] **File Sharing**: Upload and share images/files
+- [ ] **Voice Messages**: Record and send audio messages
+- [ ] **Message Search**: Search through chat history
+- [ ] **Dark Mode Toggle**: User preference for theme
+- [ ] **Custom Themes**: Multiple color scheme options
+- [ ] **Notification Sounds**: Audio feedback for new messages
+- [ ] **Message Persistence**: Database integration for history
+- [ ] **User Authentication**: OAuth integration (Google, GitHub)
+
+### Bot Enhancements
+
+- [ ] **Context Awareness**: Remember conversation context
+- [ ] **Code Execution**: Run code snippets safely
+- [ ] **Multi-language Support**: Respond in different languages
+- [ ] **Personality Modes**: Switch between different bot personalities
+- [ ] **Custom Commands**: `/help`, `/commands`, etc.
+- [ ] **Bot Training**: Learn from chat interactions
+- [ ] **Multiple AI Models**: Switch between different AI providers
+
+---
