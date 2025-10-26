@@ -2,11 +2,10 @@ import express from 'express';
 import { createServer } from 'node:http';
 import { join } from 'node:path';
 import { Server } from 'socket.io';
-import { Filter } from 'bad-words';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 import { existsSync } from 'node:fs';
-import { getBotResponse, shouldBotRespond } from './services/bot.service.js';
+import { registerChatHandlers } from './services/chat.service.js';
 
 // @ts-expect-error TS1343: import.meta is valid in ES2022
 const __filename = fileURLToPath(import.meta.url);
@@ -44,43 +43,9 @@ app.get('/', (req, res) => {
   res.sendFile(join(publicPath, 'index.html'));
 });
 
-io.on('connection', (socket) => {
-  const welcomeMessage = 'Welcome to the server!';
-  const usrConnect = 'A new user has connected.';
-  const usrDisconnected = 'A user has disconnected.';
+registerChatHandlers(io);
 
-  socket.emit('message', welcomeMessage);
-  socket.broadcast.emit('message', usrConnect);
-
-  socket.on('sendMessage', async (message, callback) => {
-    const filter = new Filter();
-    if (filter.isProfane(message)) {
-      return callback('Profanity not allowed.');
-    }
-
-    // Broadcast user message to others
-    socket.broadcast.emit('message', message);
-
-    // Check if bot should respond
-    if (shouldBotRespond(message)) {
-      try {
-        const botResponse = await getBotResponse(message);
-        // Send bot response to everyone
-        io.emit('message', `🤖 HelpBot: ${botResponse}`);
-      } catch (error) {
-        console.error('Bot error:', error);
-      }
-    }
-
-    callback();
-  });
-
-  socket.on('disconnect', () => {
-    io.emit('message', usrDisconnected);
-    console.log('User disconnected:', socket.id);
-  });
-});
-
+// Start
 server.listen(port, '0.0.0.0', () => {
   console.log(`Server listening on port ${port}`);
 });

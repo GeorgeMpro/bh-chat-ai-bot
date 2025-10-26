@@ -25,14 +25,17 @@ import { UserService } from '../services/user.service';
     LoginComponent,
   ], // Make sure this is here
   template: `
+    @if (!user()) {
+    <app-login />
+    } @else {
     <div class="chat-container">
-      <app-chat-header />
+      <app-chat-header [user]="user()" />
       <app-message-list [messages]="messages()" />
       <app-message-input (send)="onSend($event)" />
     </div>
     @if (!isLoggedIn()) {
-      <app-login />
-    }
+    <app-login />
+    } }
   `,
   styles: [
     `
@@ -58,6 +61,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   private userService = inject(UserService);
   private messageSubscription?: Subscription;
 
+  user = computed(() => this.userService.user());
+
   isLoggedIn = computed(() => this.userService.user() !== null);
 
   // Use signal for reactive state
@@ -73,7 +78,7 @@ export class ChatComponent implements OnInit, OnDestroy {
         this.messages.update((msgs) => [
           ...msgs,
           {
-            user: 'other',
+            user: msg ?? 'other',
             type: 'received',
             text: msg,
             time: new Date().toLocaleTimeString('en-US', {

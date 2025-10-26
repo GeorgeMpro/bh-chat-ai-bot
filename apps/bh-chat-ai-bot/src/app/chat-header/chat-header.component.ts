@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { UserService } from '../services/user.service';
+import { Component, inject, input } from '@angular/core';
+import { User, UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-chat-header',
@@ -112,6 +112,8 @@ export class ChatHeaderComponent {
   subtitle = 'x users connected';
 
   userService = inject(UserService);
+
+  user = input<User | null>();
   logout() {
     if (confirm('Are you sure you want to logout?')) {
       this.userService.logout();
