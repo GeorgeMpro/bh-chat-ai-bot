@@ -2,13 +2,18 @@
 
 A real-time chat application with an AI-powered bot that assists with Angular and frontend development questions. Built with Angular, Node.js, Socket.IO, and Google's Gemini AI.
 
+## 🌐 Live Demo
+
+You can try the live version here:  
+ [https://bh-chat-ai-bot.web.app/](https://bh-chat-ai-bot.web.app/)
+---
 ![Angular](https://img.shields.io/badge/Angular-18-red)
 ![Node.js](https://img.shields.io/badge/Node.js-20-green)
 ![NX](https://img.shields.io/badge/NX-Monorepo-blue)
 ![Socket.IO](https://img.shields.io/badge/Socket.IO-4.0-black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
 
---````-
+---
 
 ## 📋 Table of Contents
 
