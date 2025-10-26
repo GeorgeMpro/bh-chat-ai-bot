@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, effect, viewChild, ElementRef } from '@angular/core';
 import { MessageItemComponent } from '../message-item/message-item.component';
 import { Message } from '../models/message.model';
 
@@ -6,7 +6,7 @@ import { Message } from '../models/message.model';
   selector: 'app-message-list',
   standalone: true,
   template: `
-    <div class="chat-messages">
+    <div class="chat-messages" #messageContainer>
       @for (msg of messages(); track $index) {
         <app-message-item [msg]="msg" />
       }
@@ -23,6 +23,7 @@ import { Message } from '../models/message.model';
         padding: 20px;
         background: #f5f7fb;
         overflow-y: auto;
+        scroll-behavior: smooth; // SMOOTH SCROLLING
 
         &::-webkit-scrollbar {
           width: 6px;
@@ -39,9 +40,23 @@ import { Message } from '../models/message.model';
       }
     `,
   ],
-
   imports: [MessageItemComponent],
 })
 export class MessageListComponent {
-  messages = input.required<Message[]>(); // Modern input() signal
+  messages = input.required<Message[]>();
+  messageContainer = viewChild<ElementRef>('messageContainer');
+
+  constructor() {
+    // Auto-scroll when messages change
+    effect(() => {
+      const messages = this.messages();
+      const container = this.messageContainer()?.nativeElement;
+
+      if (container && messages.length > 0) {
+        setTimeout(() => {
+          container.scrollTop = container.scrollHeight;
+        }, 0);
+      }
+    });
+  }
 }
