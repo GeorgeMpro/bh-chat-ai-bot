@@ -4,8 +4,8 @@ A real-time chat application with an AI-powered bot that assists with Angular an
 
 ## 🌐 Live Demo
 
-You can try the live version here:  
- [https://bh-chat-ai-bot.web.app/](https://bh-chat-ai-bot.web.app/)
+- You can try the [live version](https://bh-chat-ai-bot.web.app/)
+
 ---
 ![Angular](https://img.shields.io/badge/Angular-18-red)
 ![Node.js](https://img.shields.io/badge/Node.js-20-green)
