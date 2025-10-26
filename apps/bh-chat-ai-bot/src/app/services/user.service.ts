@@ -11,7 +11,6 @@ export interface User {
 export class UserService {
   private currentUser = signal<User | null>(null);
 
-  // Available emoji avatars
   readonly avatars = [
     '👤',
     '😊',
@@ -23,6 +22,16 @@ export class UserService {
     '☕',
     '🌟',
     '🔥',
+    '😀',
+    '😎',
+    '🤓',
+    '😇',
+    '🥳',
+    '🤖',
+    '👨‍💻',
+    '👩‍💻',
+    '🦸‍♂️',
+    '🦸‍♀️',
   ];
 
   get user() {
