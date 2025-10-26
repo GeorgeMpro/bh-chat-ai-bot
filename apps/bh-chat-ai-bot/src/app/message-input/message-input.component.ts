@@ -1,6 +1,7 @@
-import { Component, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Message } from '../models/message.model';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-message-input',
@@ -13,6 +14,7 @@ import { Message } from '../models/message.model';
         placeholder="Type a message…"
         [(ngModel)]="messageText"
         (keyup.enter)="sendMessage()"
+        [disabled]="disabled()"
       />
       <button class="send-button" (click)="sendMessage()">Send</button>
     </footer>
@@ -51,6 +53,11 @@ import { Message } from '../models/message.model';
           &::placeholder {
             color: #a0aec0;
           }
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
         }
 
         .send-button {
@@ -64,12 +71,17 @@ import { Message } from '../models/message.model';
           font-size: 14px;
           transition: transform 0.2s;
 
-          &:hover {
+          &:hover:not(:disabled) {
             transform: translateY(-2px);
           }
 
-          &:active {
+          &:active:not(:disabled) {
             transform: translateY(0);
+          }
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
           }
         }
       }
@@ -80,10 +92,14 @@ export class MessageInputComponent {
   send = output<Message>();
   messageText = '';
 
+  userService = inject(UserService);
+  disabled = input<boolean>(false);
+
   sendMessage() {
+    const user = this.userService.user();
     if (this.messageText.trim()) {
       const message: Message = {
-        user: 'you',
+        user: user!.username,
         type: 'sent',
         text: this.messageText,
         time: new Date().toLocaleTimeString('en-US', {

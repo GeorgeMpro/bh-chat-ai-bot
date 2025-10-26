@@ -1,21 +1,38 @@
-import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  inject,
+  signal,
+  computed,
+} from '@angular/core';
 import { MessageListComponent } from '../message-list/message-list.component';
 import { MessageInputComponent } from '../message-input/message-input.component';
 import { ChatHeaderComponent } from '../chat-header/chat-header.component';
 import { SocketService } from '../services/socket.service';
 import { Subscription } from 'rxjs';
 import { Message } from '../models/message.model';
+import { LoginComponent } from '../login/login.component';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [MessageListComponent, MessageInputComponent, ChatHeaderComponent], // Make sure this is here
+  imports: [
+    MessageListComponent,
+    MessageInputComponent,
+    ChatHeaderComponent,
+    LoginComponent,
+  ], // Make sure this is here
   template: `
     <div class="chat-container">
       <app-chat-header />
       <app-message-list [messages]="messages()" />
       <app-message-input (send)="onSend($event)" />
     </div>
+    @if (!isLoggedIn()) {
+      <app-login />
+    }
   `,
   styles: [
     `
@@ -38,12 +55,18 @@ import { Message } from '../models/message.model';
 })
 export class ChatComponent implements OnInit, OnDestroy {
   private socketService = inject(SocketService);
+  private userService = inject(UserService);
   private messageSubscription?: Subscription;
+
+  isLoggedIn = computed(() => this.userService.user() !== null);
 
   // Use signal for reactive state
   messages = signal<Message[]>([]);
 
   ngOnInit() {
+    // Load user from localStorage
+    this.userService.loadUser();
+
     this.messageSubscription = this.socketService
       .onMessage()
       .subscribe((msg) => {
