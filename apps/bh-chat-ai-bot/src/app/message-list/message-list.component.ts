@@ -8,38 +8,11 @@ import { Message } from '../models/message.model';
   template: `
     <div class="chat-messages" #messageContainer>
       @for (msg of messages(); track $index) {
-        <app-message-item [msg]="msg" />
+      <app-message-item [msg]="msg" />
       }
     </div>
   `,
-  styles: [
-    `
-      .chat-messages {
-        position: absolute;
-        top: 73px;
-        bottom: 73px;
-        left: 0;
-        right: 0;
-        padding: 20px;
-        background: #f5f7fb;
-        overflow-y: auto;
-        scroll-behavior: smooth; // SMOOTH SCROLLING
-
-        &::-webkit-scrollbar {
-          width: 6px;
-        }
-
-        &::-webkit-scrollbar-track {
-          background: transparent;
-        }
-
-        &::-webkit-scrollbar-thumb {
-          background: #cbd5e0;
-          border-radius: 3px;
-        }
-      }
-    `,
-  ],
+  styleUrl: 'message-list.component.scss',
   imports: [MessageItemComponent],
 })
 export class MessageListComponent {
@@ -47,7 +20,6 @@ export class MessageListComponent {
   messageContainer = viewChild<ElementRef>('messageContainer');
 
   constructor() {
-    // Auto-scroll when messages change
     effect(() => {
       const messages = this.messages();
       const container = this.messageContainer()?.nativeElement;

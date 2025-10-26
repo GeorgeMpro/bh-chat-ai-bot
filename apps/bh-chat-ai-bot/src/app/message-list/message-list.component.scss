@@ -1,0 +1,24 @@
+.chat-messages {
+  position: absolute;
+  top: 73px;
+  bottom: 73px;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background: #f5f7fb;
+  overflow-y: auto;
+  scroll-behavior: smooth; // SMOOTH SCROLLING
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 3px;
+  }
+}
