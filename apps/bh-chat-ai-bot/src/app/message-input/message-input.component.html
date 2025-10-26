@@ -1,0 +1,18 @@
+<footer class="chat-input">
+  <input
+    type="text"
+    [placeholder]="placeholder"
+    [(ngModel)]="messageText"
+    (keyup.enter)="handleSend()"
+    [disabled]="disabled()"
+    aria-label="Message input"
+  />
+  <button
+    class="send-button"
+    (click)="handleSend()"
+    [disabled]="!canSend()"
+    aria-label="Send message"
+  >
+    {{ sendButtonText }}
+  </button>
+</footer>

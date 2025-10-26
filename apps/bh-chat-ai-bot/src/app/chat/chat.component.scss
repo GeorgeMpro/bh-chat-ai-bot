@@ -1,0 +1,15 @@
+@use '../../styles/variables' as *;
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  width: 100%;
+  max-width: 900px;
+  margin: 20px auto;
+  background: white;
+  border-radius: $border-radius-3;
+  box-shadow: $chat-shadow;
+  overflow: hidden;
+  position: relative;
+}

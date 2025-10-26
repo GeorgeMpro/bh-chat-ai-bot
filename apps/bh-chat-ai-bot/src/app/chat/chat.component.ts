@@ -47,62 +47,20 @@ import { UserService } from '../services/user.service';
     ChatHeaderComponent,
     LoginComponent,
   ],
-  template: `
-    @if (!user()) {
-    <app-login />
-    } @else {
-    <div class="chat-container">
-      <app-chat-header [user]="user()" />
-      <app-message-list [messages]="messages()" />
-      <app-message-input (send)="onSend($event)" />
-    </div>
-    @if (!isLoggedIn()) {
-    <app-login />
-    } }
-  `,
-  styles: [
-    `
-      @use '../../styles/variables' as *;
-
-      .chat-container {
-        display: flex;
-        flex-direction: column;
-        height: 90vh;
-        width: 100%;
-        max-width: 900px;
-        margin: 20px auto;
-        background: white;
-        border-radius: $border-radius-3;
-        box-shadow: $chat-shadow;
-        overflow: hidden;
-        position: relative;
-      }
-    `,
-  ],
+  templateUrl: 'chat.component.html',
+  styleUrl: 'chat.component.scss',
 })
 export class ChatComponent implements OnInit, OnDestroy {
-  /** Socket service for real-time communication */
-  private readonly socketService = inject(SocketService);
-
-  /** User service for authentication and user state */
-  private readonly userService = inject(UserService);
-
-  /** Subscription to incoming messages */
-  private messageSubscription?: Subscription;
-
-  /** Default avatar for users without custom avatar */
   private readonly DEFAULT_AVATAR = '😀';
-
-  /** Default avatar for system messages */
   private readonly SYSTEM_AVATAR = '🔔';
 
-  /** Computed signal for current user */
+  private readonly socketService = inject(SocketService);
+  private readonly userService = inject(UserService);
+
+  private messageSubscription?: Subscription;
+
   user = computed(() => this.userService.user());
-
-  /** Computed signal for login state */
   isLoggedIn = computed(() => this.userService.user() !== null);
-
-  /** Signal containing all chat messages */
   messages = signal<Message[]>([]);
 
   /**
@@ -152,7 +110,6 @@ export class ChatComponent implements OnInit, OnDestroy {
    * ```
    */
   async onSend(message: Message): Promise<void> {
-    // Optimistic UI update
     this.addMessageToUI(message);
 
     try {
@@ -162,20 +119,10 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Loads user data from localStorage
-   *
-   * @private
-   */
   private loadUserData(): void {
     this.userService.loadUser();
   }
 
-  /**
-   * Subscribes to incoming socket messages
-   *
-   * @private
-   */
   private subscribeToMessages(): void {
     this.messageSubscription = this.socketService
       .onMessage()
@@ -184,21 +131,10 @@ export class ChatComponent implements OnInit, OnDestroy {
       });
   }
 
-  /**
-   * Unsubscribes from socket messages
-   *
-   * @private
-   */
   private unsubscribeFromMessages(): void {
     this.messageSubscription?.unsubscribe();
   }
 
-  /**
-   * Handles incoming messages from the server
-   *
-   * @private
-   * @param {string | ServerMessage} msg - The incoming message
-   */
   private handleIncomingMessage(msg: string | ServerMessage): void {
     if (typeof msg === 'string') {
       this.handleSystemMessage(msg);
@@ -207,12 +143,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Handles system notification messages
-   *
-   * @private
-   * @param {string} text - The system message text
-   */
   private handleSystemMessage(text: string): void {
     const systemMessage: Message = {
       user: 'System',
@@ -225,12 +155,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.addMessageToUI(systemMessage);
   }
 
-  /**
-   * Handles user messages from the server
-   *
-   * @private
-   * @param {ServerMessage} serverMsg - The server message object
-   */
   private handleUserMessage(serverMsg: ServerMessage): void {
     const message: Message = {
       user: serverMsg.username,
@@ -243,23 +167,10 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.addMessageToUI(message);
   }
 
-  /**
-   * Adds a message to the UI state
-   *
-   * @private
-   * @param {Message} message - The message to add
-   */
   private addMessageToUI(message: Message): void {
     this.messages.update((msgs) => [...msgs, message]);
   }
 
-  /**
-   * Sends a message to the server via WebSocket
-   *
-   * @private
-   * @param {Message} message - The message to send
-   * @throws {Error} If sending fails
-   */
   private async sendMessageToServer(message: Message): Promise<void> {
     const currentUser = this.userService.user();
 
@@ -270,26 +181,10 @@ export class ChatComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Handles errors when sending messages
-   *
-   * @private
-   * @param {unknown} error - The error that occurred
-   */
   private handleSendError(error: unknown): void {
     console.error('Failed to send message:', error);
-
-    // Could add user notification here
-    // this.notificationService.showError('Failed to send message');
   }
 
-  /**
-   * Formats a timestamp string to local time
-   *
-   * @private
-   * @param {string} timestamp - ISO timestamp string
-   * @returns {string} Formatted time string (e.g., "12:30 PM")
-   */
   private formatTime(timestamp: string): string {
     return new Date(timestamp).toLocaleTimeString('en-US', {
       hour: '2-digit',
@@ -297,12 +192,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Formats the current time
-   *
-   * @private
-   * @returns {string} Formatted current time
-   */
   private formatCurrentTime(): string {
     return this.formatTime(new Date().toISOString());
   }

@@ -14,11 +14,11 @@ type OutPayload = {
   time: string;
   avatar: string;
 };
+
 export function registerChatHandlers(io: Server): void {
   io.on('connection', (socket: Socket) => {
     let username = 'anonymous';
     let userAvatar = '😀';
-    // system notes (strings are fine here)
     socket.emit('message', welcomeMessage);
     socket.broadcast.emit('message', usrConnect);
 
@@ -45,7 +45,7 @@ export function registerChatHandlers(io: Server): void {
           username,
           text,
           time: new Date().toISOString(),
-          avatar: userAvatar, // Include user's avatar
+          avatar: userAvatar,
         };
         socket.broadcast.emit('message', out);
 
@@ -56,7 +56,7 @@ export function registerChatHandlers(io: Server): void {
               username: 'Bot',
               text: botText,
               time: new Date().toISOString(),
-              avatar: '🤖', // Bot emoji
+              avatar: '🤖',
             };
             io.emit('message', botOut);
           } catch (error) {

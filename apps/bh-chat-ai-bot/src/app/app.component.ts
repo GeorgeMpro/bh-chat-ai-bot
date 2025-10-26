@@ -5,18 +5,7 @@ import { ChatComponent } from './chat/chat.component';
 @Component({
   imports: [RouterModule, ChatComponent],
   selector: 'app-root',
-  template: `
-    <main class="content">
-      <!--      todo-->
-      <!--      <router-outlet></router-outlet>-->
-      <app-chat></app-chat>
-    </main>
-  `,
-  styles: `
-    .content {
-      flex: 1;
-      align-content: center;
-    }
-  `,
+  templateUrl: 'app.component.html',
+  styleUrl: 'app.component.scss',
 })
 export class AppComponent {}

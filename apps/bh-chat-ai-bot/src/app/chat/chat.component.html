@@ -1,0 +1,11 @@
+@if (!user()) {
+  <app-login />
+} @else {
+  <div class="chat-container">
+    <app-chat-header [user]="user()" />
+    <app-message-list [messages]="messages()" />
+    <app-message-input (send)="onSend($event)" />
+  </div>
+  @if (!isLoggedIn()) {
+    <app-login />
+  } }

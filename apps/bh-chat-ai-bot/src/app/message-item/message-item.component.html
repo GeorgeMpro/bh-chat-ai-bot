@@ -1,0 +1,23 @@
+<div class="message" [ngClass]="messageType()">
+  @if (isReceived()) {
+    <div class="avatar-emoji">{{ avatar() }}</div>
+  }
+
+  <div class="message-content">
+    <div class="message-bubble">
+      @if (isReceived()) {
+        <div class="message-header">
+          <span class="username">{{ username() }}</span>
+        </div>
+      }
+      <p>{{ text() }}</p>
+      <div class="message-footer">
+        <span class="time">{{ time() }}</span>
+      </div>
+    </div>
+  </div>
+
+  @if (isSent()) {
+    <div class="avatar-emoji">{{ avatar() }}</div>
+  }
+</div>

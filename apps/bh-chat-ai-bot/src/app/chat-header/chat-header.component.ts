@@ -16,37 +16,13 @@ import { User, UserService } from '../services/user.service';
  */
 @Component({
   selector: 'app-chat-header',
-  template: `
-    <header class="chat-header">
-      <div class="header-content">
-        <h2>{{ title }}</h2>
-        <p class="subtitle">{{ subtitle }}</p>
-      </div>
-
-      @if (currentUser(); as user) {
-      <div class="user-info">
-        <span class="user-avatar">{{ user.avatar }}</span>
-        <span class="username">{{ user.username }}</span>
-        <button class="logout-btn" (click)="handleLogout()" aria-label="Logout">
-          Logout
-        </button>
-      </div>
-      }
-    </header>
-  `,
+  templateUrl: 'chat-header.component.html',
   styleUrl: 'chat-header.component.scss',
 })
 export class ChatHeaderComponent {
-  /** User service for logout functionality */
   protected readonly userService = inject(UserService);
 
-  /** Chat title displayed in header */
   protected readonly title = 'Chat With Bot';
-
-  /** Subtitle showing connection status */
-  protected readonly subtitle = 'x users connected'; // TODO: Implement active user count
-
-  /** Confirmation message for logout */
   private readonly LOGOUT_CONFIRMATION = 'Are you sure you want to logout?';
 
   /**

@@ -3,17 +3,7 @@ import { io, Socket } from 'socket.io-client';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { ServerMessage } from '../models/message.model';
-
-/**
- * Payload type for sending messages to the server
- */
-export type MessagePayload =
-  | string
-  | {
-      text: string;
-      username: string;
-      avatar: string;
-    };
+import { MessagePayload } from '../models/payload.model';
 
 /**
  * Service for managing WebSocket connections and real-time communication
@@ -39,19 +29,9 @@ export type MessagePayload =
   providedIn: 'root',
 })
 export class SocketService {
-  /** Socket.IO client instance */
   private readonly socket: Socket;
-
-  /** Flag to track connection status */
   private isConnected = false;
 
-  /**
-   * Creates an instance of SocketService
-   *
-   * @description
-   * Initializes the Socket.IO connection and sets up event handlers
-   * for connection and disconnection events.
-   */
   constructor() {
     this.socket = this.initializeSocket();
     this.setupConnectionHandlers();
@@ -140,66 +120,12 @@ export class SocketService {
     });
   }
 
-  /**
-   * Gets the current connection status
-   *
-   * @returns {boolean} True if connected to server
-   *
-   * @example
-   * ```typescript
-   * if (this.socketService.isSocketConnected()) {
-   *   // Send message
-   * }
-   * ```
-   */
-  isSocketConnected(): boolean {
-    return this.isConnected;
-  }
-
-  /**
-   * Manually disconnect from the server
-   *
-   * @description
-   * Closes the WebSocket connection. Useful for cleanup or logout.
-   *
-   * @example
-   * ```typescript
-   * ngOnDestroy() {
-   *   this.socketService.disconnect();
-   * }
-   * ```
-   */
-  disconnect(): void {
-    if (this.socket) {
-      this.socket.disconnect();
-    }
-  }
-
-  /**
-   * Manually reconnect to the server
-   *
-   * @description
-   * Attempts to re-establish the WebSocket connection.
-   *
-   * @example
-   * ```typescript
-   * reconnect() {
-   *   this.socketService.reconnect();
-   * }
-   * ```
-   */
   reconnect(): void {
     if (this.socket) {
       this.socket.connect();
     }
   }
 
-  /**
-   * Initializes the Socket.IO connection
-   *
-   * @private
-   * @returns {Socket} Configured Socket.IO client instance
-   */
   private initializeSocket(): Socket {
     return io(environment.apiUrl, {
       transports: ['websocket'],
@@ -210,11 +136,6 @@ export class SocketService {
     });
   }
 
-  /**
-   * Sets up handlers for connection events
-   *
-   * @private
-   */
   private setupConnectionHandlers(): void {
     this.socket.on('connect', () => {
       this.isConnected = true;
@@ -239,12 +160,6 @@ export class SocketService {
     });
   }
 
-  /**
-   * Logs connection status changes
-   *
-   * @private
-   * @param {string} message - Status message to log
-   */
   private logConnection(message: string): void {
     const timestamp = new Date().toISOString();
     console.log(`[${timestamp}] ${message}`);

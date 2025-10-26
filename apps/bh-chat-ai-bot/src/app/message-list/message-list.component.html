@@ -1,0 +1,5 @@
+<div class="chat-messages" #messageContainer>
+  @for (msg of messages(); track trackMessage($index, msg)) {
+    <app-message-item [msg]="msg" />
+  }
+</div>

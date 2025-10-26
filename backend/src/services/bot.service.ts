@@ -46,10 +46,6 @@ const TECH_KEYWORDS = [
  * Question starter words that trigger bot responses
  */
 const QUESTION_STARTERS = ['how', 'what', 'why'] as const;
-
-/**
- * Default error message when bot encounters issues
- */
 const DEFAULT_ERROR_MESSAGE =
   'Hmm, my circuits are a bit fried right now. Try asking again! ⚡';
 
@@ -82,7 +78,6 @@ function createBotModel(genAI: GoogleGenerativeAI): GenerativeModel {
   });
 }
 
-// Initialize AI
 const genAI = initializeAI();
 const model = createBotModel(genAI);
 
@@ -166,27 +161,13 @@ function validateUserMessage(message: string): void {
   }
 }
 
-/**
- * Extracts text from AI response
- *
- * @private
- * @param {any} result - AI generation result
- * @returns {string} Response text
- */
 function extractResponseText(result: any): string {
   return result.response.text();
 }
 
-/**
- * Handles and logs bot errors
- *
- * @private
- * @param {unknown} error - Error to handle
- */
 function handleBotError(error: unknown): void {
   console.error('Gemini API error:', error);
 
-  // Log additional context for specific error types
   if (error instanceof Error) {
     if (error.message.includes('rate limit')) {
       console.error(
@@ -200,41 +181,18 @@ function handleBotError(error: unknown): void {
   }
 }
 
-/**
- * Normalizes a message for analysis
- *
- * @private
- * @param {string} message - Message to normalize
- * @returns {string} Lowercase, trimmed message
- */
 function normalizeMessage(message: string): string {
   return message.toLowerCase().trim();
 }
 
-/**
- * Checks if message contains a question
- *
- * @private
- * @param {string} normalized - Normalized message
- * @returns {boolean} True if message is a question
- */
 function hasQuestion(normalized: string): boolean {
-  // Check for question mark
   if (normalized.includes('?')) {
     return true;
   }
 
-  // Check for question starter words
   return QUESTION_STARTERS.some((starter) => normalized.startsWith(starter));
 }
 
-/**
- * Checks if message contains technical keywords
- *
- * @private
- * @param {string} normalized - Normalized message
- * @returns {boolean} True if message contains tech keywords
- */
 function hasTechKeyword(normalized: string): boolean {
   return TECH_KEYWORDS.some((keyword) => normalized.includes(keyword));
 }

@@ -1,0 +1,15 @@
+<header class="chat-header">
+  <div class="header-content">
+    <h2>{{ title }}</h2>
+  </div>
+
+  @if (currentUser(); as user) {
+    <div class="user-info">
+      <span class="user-avatar">{{ user.avatar }}</span>
+      <span class="username">{{ user.username }}</span>
+      <button class="logout-btn" (click)="handleLogout()" aria-label="Logout">
+        Logout
+      </button>
+    </div>
+  }
+</header>

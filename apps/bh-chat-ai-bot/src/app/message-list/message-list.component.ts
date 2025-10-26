@@ -33,26 +33,14 @@ import { Message } from '../models/message.model';
 @Component({
   selector: 'app-message-list',
   standalone: true,
-  template: `
-    <div class="chat-messages" #messageContainer>
-      @for (msg of messages(); track trackMessage($index, msg)) {
-      <app-message-item [msg]="msg" />
-      }
-    </div>
-  `,
+  templateUrl: 'message-list.component.html',
   styleUrl: 'message-list.component.scss',
   imports: [MessageItemComponent],
 })
 export class MessageListComponent {
-  /** Delay before scrolling (ms) */
   private readonly SCROLL_DELAY = 0;
 
-  /**
-   * Array of messages to display
-   *
-   * @description
-   * Required input containing all chat messages in chronological order
-   */
+
   messages = input.required<Message[]>();
 
   /**

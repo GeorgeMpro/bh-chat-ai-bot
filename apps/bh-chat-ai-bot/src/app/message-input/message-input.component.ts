@@ -23,49 +23,17 @@ import { UserService } from '../services/user.service';
   selector: 'app-message-input',
   standalone: true,
   imports: [FormsModule],
-  template: `
-    <footer class="chat-input">
-      <input
-        type="text"
-        [placeholder]="placeholder"
-        [(ngModel)]="messageText"
-        (keyup.enter)="handleSend()"
-        [disabled]="disabled()"
-        aria-label="Message input"
-      />
-      <button
-        class="send-button"
-        (click)="handleSend()"
-        [disabled]="!canSend()"
-        aria-label="Send message"
-      >
-        {{ sendButtonText }}
-      </button>
-    </footer>
-  `,
+  templateUrl: 'message-input.component.html',
   styleUrl: 'message-input.component.scss',
 })
 export class MessageInputComponent {
-  /** User service for current user info */
   private readonly userService = inject(UserService);
 
-  /** UI text constants */
   protected readonly placeholder = 'Type a message…';
   protected readonly sendButtonText = 'Send';
-
-  /** Event emitted when a message is sent */
-  send = output<Message>();
-
-  /** Current message text being composed */
   protected messageText = '';
 
-  /**
-   * Whether the input is disabled
-   *
-   * @description
-   * Can be used to disable input during connection issues
-   * or while waiting for server response.
-   */
+  send = output<Message>();
   disabled = input<boolean>(false);
 
   /**
@@ -90,42 +58,18 @@ export class MessageInputComponent {
     }
   }
 
-  /**
-   * Checks if a message can be sent
-   *
-   * @returns {boolean} True if message is valid and user is logged in
-   */
   protected canSend(): boolean {
     return this.hasValidMessage() && this.hasCurrentUser() && !this.disabled();
   }
 
-  /**
-   * Checks if message text is valid
-   *
-   * @private
-   * @returns {boolean} True if message is not empty
-   */
   private hasValidMessage(): boolean {
     return this.messageText.trim().length > 0;
   }
 
-  /**
-   * Checks if user is logged in
-   *
-   * @private
-   * @returns {boolean} True if user exists
-   */
   private hasCurrentUser(): boolean {
     return this.userService.user() !== null;
   }
 
-  /**
-   * Creates a Message object from current input
-   *
-   * @private
-   * @returns {Message} The formatted message
-   * @throws {Error} If no user is logged in
-   */
   private createMessage(): Message {
     const user = this.userService.user();
 
@@ -142,31 +86,14 @@ export class MessageInputComponent {
     };
   }
 
-  /**
-   * Emits the message to parent component
-   *
-   * @private
-   * @param {Message} message - The message to emit
-   */
   private emitMessage(message: Message): void {
     this.send.emit(message);
   }
 
-  /**
-   * Clears the input field
-   *
-   * @private
-   */
   private clearInput(): void {
     this.messageText = '';
   }
 
-  /**
-   * Formats current time for message timestamp
-   *
-   * @private
-   * @returns {string} Formatted time (e.g., "12:30 PM")
-   */
   private formatCurrentTime(): string {
     return new Date().toLocaleTimeString('en-US', {
       hour: '2-digit',

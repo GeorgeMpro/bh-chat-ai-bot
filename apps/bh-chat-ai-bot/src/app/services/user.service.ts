@@ -1,9 +1,5 @@
 import { Injectable, signal } from '@angular/core';
 
-/**
- * Represents a user in the chat application
- * @interface User
- */
 export interface User {
   username: string;
   avatar: string;
@@ -31,14 +27,7 @@ export interface User {
   providedIn: 'root',
 })
 export class UserService {
-  private currentUser = signal<User | null>(null);
-
-  /** Local storage key for user data persistence */
   private static readonly STORAGE_KEY = 'chatUser';
-  /**
-   * Collection of available emoji avatars for users to choose from
-   * @readonly
-   */
   readonly avatars: readonly string[] = [
     '👤',
     '😊',
@@ -61,6 +50,8 @@ export class UserService {
     '🦸‍♂️',
     '🦸‍♀️',
   ] as const;
+
+  private currentUser = signal<User | null>(null);
 
   get user() {
     return this.currentUser.asReadonly();
@@ -138,30 +129,11 @@ export class UserService {
     this.clearStorage();
   }
 
-  /**
-   * Returns a random avatar from the available avatars
-   *
-   * @description
-   * Useful for providing a default avatar when user first logs in.
-   * Uses Math.random() for selection.
-   *
-   * @returns {string} A random emoji avatar
-   *
-   * @example
-   * ```typescript
-   * const defaultAvatar = this.userService.getRandomAvatar();
-   * ```
-   */
   getRandomAvatar(): string {
     const randomIndex = Math.floor(Math.random() * this.avatars.length);
     return this.avatars[randomIndex];
   }
-  /**
-   * Persists user data to localStorage
-   *
-   * @private
-   * @param {User} user - The user data to persist
-   */
+
   private persistUser(user: User): void {
     try {
       const serialized = JSON.stringify(user);
@@ -171,14 +143,6 @@ export class UserService {
     }
   }
 
-  /**
-   * Parses stored user data from JSON string
-   *
-   * @private
-   * @param {string} stored - JSON string from localStorage
-   * @returns {User} Parsed user object
-   * @throws {SyntaxError} If JSON is invalid
-   */
   private parseStoredUser(stored: string): User {
     const parsed = JSON.parse(stored);
 
@@ -190,13 +154,6 @@ export class UserService {
     return parsed;
   }
 
-  /**
-   * Validates user object structure
-   *
-   * @private
-   * @param {any} obj - Object to validate
-   * @returns {boolean} True if object has valid User structure
-   */
   private isValidUser(obj: any): obj is User {
     return (
       typeof obj === 'object' &&
@@ -206,11 +163,6 @@ export class UserService {
     );
   }
 
-  /**
-   * Clears user data from localStorage
-   *
-   * @private
-   */
   private clearStorage(): void {
     try {
       localStorage.removeItem(UserService.STORAGE_KEY);
