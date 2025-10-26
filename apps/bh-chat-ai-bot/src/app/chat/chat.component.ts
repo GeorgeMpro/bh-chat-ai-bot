@@ -22,12 +22,16 @@ import { Message } from '../models/message.model';
       .chat-container {
         display: flex;
         flex-direction: column;
-        height: 100vh;
-        max-width: 600px;
-        margin: 0 auto;
-        border: 1px solid #ddd;
-        border-radius: 8px;
+        height: 90vh;
+        max-height: 800px;
+        width: 100%;
+        max-width: 480px;
+        margin: 20px auto;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         overflow: hidden;
+        position: relative; // ADD THIS
       }
     `,
   ],

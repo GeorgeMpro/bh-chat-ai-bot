@@ -8,7 +8,7 @@ import { Message } from '../models/message.model';
   template: `
     <div class="chat-messages">
       @for (msg of messages(); track $index) {
-        <app-message-item [msg]="msg" />
+      <app-message-item [msg]="msg" />
       }
     </div>
   `,
@@ -16,9 +16,25 @@ import { Message } from '../models/message.model';
     `
       .chat-messages {
         flex: 1;
-        padding: 16px;
-        background: #fff;
+        padding: 20px;
+        background: #f5f7fb;
         overflow-y: auto;
+        min-height: 0;
+
+        /* Custom scrollbar */
+
+        &::-webkit-scrollbar {
+          width: 6px;
+        }
+
+        &::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background: #cbd5e0;
+          border-radius: 3px;
+        }
       }
     `,
   ],

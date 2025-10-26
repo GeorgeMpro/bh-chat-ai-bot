@@ -21,24 +21,51 @@ import { Message } from '../models/message.model';
     `
       .chat-input {
         display: flex;
-        padding: 12px;
-        background: #f5f5f5;
+        align-items: center;
+        padding: 16px 20px;
+        background: white;
+        border-top: 1px solid #e2e8f0;
+        gap: 12px;
+        flex-shrink: 0;
 
         input[type='text'] {
           flex: 1;
-          padding: 10px;
-          border: 1px solid #ccc;
-          border-radius: 4px;
+          padding: 12px 16px;
+          border: 1px solid #e2e8f0;
+          border-radius: 24px;
+          font-size: 14px;
+          background: #f7fafc;
+          transition: all 0.2s;
+
+          &:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+          }
+
+          &::placeholder {
+            color: #a0aec0;
+          }
         }
 
         .send-button {
-          margin-left: 8px;
-          padding: 0 16px;
-          background: #4a90e2;
-          color: #fff;
+          padding: 12px 24px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
           border: none;
-          border-radius: 4px;
+          border-radius: 24px;
           cursor: pointer;
+          font-weight: 600;
+          font-size: 14px;
+          transition: transform 0.2s;
+
+          &:hover {
+            transform: translateY(-2px);
+          }
+
+          &:active {
+            transform: translateY(0);
+          }
         }
       }
     `,
