@@ -74,7 +74,10 @@ import { NgClass } from '@angular/common';
         .message-content {
           display: flex;
           flex-direction: column;
-          max-width: 70%;
+          word-wrap: break-word;
+          word-break: break-word;
+          overflow-wrap: break-word;
+          max-width: 100%;
           gap: 4px;
         }
 
@@ -96,6 +99,8 @@ import { NgClass } from '@angular/common';
             margin: 0 0 4px 0; // ADD MARGIN BOTTOM
             line-height: 1.4;
             font-size: 13px;
+            word-wrap: break-word;
+            word-break: break-word;
           }
         }
 
