@@ -15,11 +15,34 @@ type OutPayload = {
   avatar: string;
 };
 
+class MessageHistory {
+  private messages: OutPayload[] = [];
+  private readonly MAX_MESSAGES = 20;
+
+  add(message: OutPayload): void {
+    this.messages.push(message);
+    if (this.messages.length > this.MAX_MESSAGES) {
+      this.messages.shift();
+    }
+  }
+
+  getAll(): OutPayload[] {
+    return [...this.messages];
+  }
+}
+
+const messageHistory = new MessageHistory();
+
 export function registerChatHandlers(io: Server): void {
   io.on('connection', (socket: Socket) => {
     let username = 'anonymous';
     let userAvatar = '😀';
     socket.emit('message', welcomeMessage);
+
+    // sending new user history
+    const history = messageHistory.getAll();
+    history.forEach((msg) => socket.emit('message', msg));
+
     socket.broadcast.emit('message', usrConnect);
 
     socket.on(
@@ -47,6 +70,9 @@ export function registerChatHandlers(io: Server): void {
           time: new Date().toISOString(),
           avatar: userAvatar,
         };
+        // message history storage
+        messageHistory.add(out);
+
         socket.broadcast.emit('message', out);
 
         if (shouldBotRespond(text)) {

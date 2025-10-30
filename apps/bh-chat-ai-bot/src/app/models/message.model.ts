@@ -5,6 +5,7 @@ export interface Message {
   time: string;
   avatar: string;
 }
+
 export interface ServerMessage {
   username: string;
   text: string;

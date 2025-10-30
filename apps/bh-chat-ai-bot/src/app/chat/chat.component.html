@@ -6,6 +6,4 @@
     <app-message-list [messages]="messages()" />
     <app-message-input (send)="onSend($event)" />
   </div>
-  @if (!isLoggedIn()) {
-    <app-login />
-  } }
+}

@@ -42,10 +42,9 @@ const TECH_KEYWORDS = [
   'help',
 ] as const;
 
-/**
- * Question starter words that trigger bot responses
- */
-const QUESTION_STARTERS = ['how', 'what', 'why'] as const;
+const questionPattern =
+  /\b(how|what|why|when|where|who|can|could|should|would|is|are|do|does|did|will|won't|can't|isn't|aren't)\b/i;
+
 const DEFAULT_ERROR_MESSAGE =
   'Hmm, my circuits are a bit fried right now. Try asking again! ⚡';
 
@@ -141,7 +140,7 @@ export function shouldBotRespond(message: string): boolean {
 
   const normalized = normalizeMessage(message);
 
-  return hasQuestion(normalized) || hasTechKeyword(normalized);
+  return hasQuestion(normalized) && hasTechKeyword(normalized);
 }
 
 /**
@@ -190,7 +189,7 @@ function hasQuestion(normalized: string): boolean {
     return true;
   }
 
-  return QUESTION_STARTERS.some((starter) => normalized.startsWith(starter));
+  return questionPattern.test(normalized);
 }
 
 function hasTechKeyword(normalized: string): boolean {
